@@ -1,17 +1,23 @@
+import ProjetoPoo.TelaInicial;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TelaLogin extends JFrame {
+    
     private JTextField txtLogin;
     private JPasswordField txtSenha;
-    private JButton btnLogin, btnRegistrar;
+    private JButton btnLogin;
+    private JButton btnRegistrar;
 
     public TelaLogin() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Tela de Login");
-        setSize(300, 200);
+        setSize(400, 200);
         setResizable(false);
         setLocationRelativeTo(null);
 
@@ -29,13 +35,28 @@ public class TelaLogin extends JFrame {
 
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                login();
+                String login = txtLogin.getText();
+                String senha = new String(txtSenha.getPassword());
+
+                // Verificar a autenticação do usuário
+                if (autenticarUsuario(login, senha)) {
+                    TelaInicial telaInicial = null;
+                    try {
+                        telaInicial = new TelaInicial();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    telaInicial.setVisible(true);
+                    dispose(); // Fechar a tela de login
+                } else {
+                    JOptionPane.showMessageDialog(null, "Credenciais inválidas. Por favor, tente novamente.", "Erro de autenticação", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                registrar();
+                abrirTelaCadastro();
             }
         });
 
@@ -51,18 +72,16 @@ public class TelaLogin extends JFrame {
         setVisible(true);
     }
 
-    private void login() {
-        String login = txtLogin.getText();
-        String senha = new String(txtSenha.getPassword());
+    private boolean autenticarUsuario(String login, String senha) {
+    String loginCorreto = "admin";
+    String senhaCorreta = "admin";
 
-        // Realizar ações de login aqui
+    return login.equals(loginCorreto) && senha.equals(senhaCorreta);
+}
 
-        JOptionPane.showMessageDialog(this, "Login realizado com sucesso!");
-    }
-
-    private void registrar() {
-        new Telaregistro();
-       dispose();
+    private void abrirTelaCadastro() {
+        TelaCadastro telaCadastro = new TelaCadastro();
+        telaCadastro.setVisible(true);
     }
 
     public static void main(String[] args) {
@@ -72,12 +91,4 @@ public class TelaLogin extends JFrame {
             }
         });
     }
-
-    private static class Telaregistro {
-
-        public Telaregistro() {
-        }
-    }
 }
-
-
