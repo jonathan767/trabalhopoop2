@@ -53,7 +53,7 @@ public class Tel2a extends JFrame{
                 new MaskFormatter("##/##/####"));
         lblTipo = new JLabel("Tipos de pessoas:");
         btnEnviar = new JButton("Enviar");
-        btnVoltar = new JButton("Voltar");
+        btnVoltar = new JButton("sair");
         
         btnVoltar.addActionListener(new ActionListener() {
             @Override
@@ -63,10 +63,7 @@ public class Tel2a extends JFrame{
                 }
             
         });
-        
-        
-        
-        btnEnviar.addActionListener(new ActionListener() {
+                btnEnviar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	try{
                     cliqueBtnEnviar();

@@ -143,7 +143,7 @@ public class TelaInicial extends JFrame{
                ano = ftxtano.getText(),
               placa = txtplaca.getText(),
                tipo = cmbTipo.getSelectedItem().toString(),
-                proprietario = cmbProprietario.getSelectedItem().toString();
+            proprietario = cmbProprietario.getSelectedItem().toString();
               modelo = txtmodelo.getText();
               
         
