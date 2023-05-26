@@ -7,28 +7,44 @@ public class TelaCadastro extends JFrame {
     private JTextField txtLogin;
     private JTextField txtEmail;
     private JPasswordField txtSenha;
-    private JButton btnRegistrar;
+    private JButton btnRegistrar, btnVoltar;
 
     public TelaCadastro() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Tela de Cadastro");
-        setSize(400, 200);
+        setSize(400, 400);
         setResizable(false);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2, 10, 10));
+        Container container = getContentPane();
+        container.setLayout(null);
 
         JLabel lblLogin = new JLabel("Login:");
-        JLabel lblEmail = new JLabel("E-mail:");
-        JLabel lblSenha = new JLabel("Senha:");
+        lblLogin.setBounds(50, 50, 60, 25);
+        container.add(lblLogin);
 
-        txtLogin = new JTextField(20);
-        txtEmail = new JTextField(20);
-        txtSenha = new JPasswordField(20);
+        txtLogin = new JTextField();
+        txtLogin.setBounds(120, 50, 200, 25);
+        container.add(txtLogin);
+
+        JLabel lblEmail = new JLabel("E-mail:");
+        lblEmail.setBounds(50, 100, 60, 25);
+        container.add(lblEmail);
+
+        txtEmail = new JTextField();
+        txtEmail.setBounds(120, 100, 200, 25);
+        container.add(txtEmail);
+
+        JLabel lblSenha = new JLabel("Senha:");
+        lblSenha.setBounds(50, 150, 60, 25);
+        container.add(lblSenha);
+
+        txtSenha = new JPasswordField();
+        txtSenha.setBounds(120, 150, 200, 25);
+        container.add(txtSenha);
 
         btnRegistrar = new JButton("Registrar");
-
+        btnRegistrar.setBounds(120, 200, 100, 30);
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String login = txtLogin.getText();
@@ -43,19 +59,24 @@ public class TelaCadastro extends JFrame {
                 dispose(); // Fechar a tela de cadastro
             }
         });
+        container.add(btnRegistrar);
 
-        panel.add(lblLogin);
-        panel.add(txtLogin);
-        panel.add(lblEmail);
-        panel.add(txtEmail);
-        panel.add(lblSenha);
-        panel.add(txtSenha);
-        panel.add(new JLabel()); // Espaçamento vazio para alinhar corretamente o botão de registro
-        panel.add(btnRegistrar);
-
-        getContentPane().add(panel, BorderLayout.CENTER);
+        btnVoltar = new JButton("Voltar");
+        btnVoltar.setBounds(220, 200, 100, 30);
+        btnVoltar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                abrirTelaLogin();
+            }
+        });
+        container.add(btnVoltar);
 
         setVisible(true);
+    }
+
+    private void abrirTelaLogin() {
+        TelaLogin telaLogin = new TelaLogin();
+        telaLogin.setVisible(true);
+        dispose();
     }
 
     public static void main(String[] args) {
@@ -66,3 +87,5 @@ public class TelaCadastro extends JFrame {
         });
     }
 }
+
+

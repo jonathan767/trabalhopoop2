@@ -1,4 +1,6 @@
 import ProjetoPoo.TelaInicial;
+import ProjetoPoo.TelaGerenciarCadastros;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,30 +10,35 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TelaLogin extends JFrame {
-    
+
     private JTextField txtLogin;
     private JPasswordField txtSenha;
     private JButton btnLogin;
     private JButton btnRegistrar;
+    private JButton btnGerenciarCadastros;
 
     public TelaLogin() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Tela de Login");
-        setSize(400, 200);
+        setSize(500, 250);
         setResizable(false);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2, 10, 10));
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(10, 10, 10, 10);
 
         JLabel lblLogin = new JLabel("Login:");
         JLabel lblSenha = new JLabel("Senha:");
 
-        txtLogin = new JTextField(20);
-        txtSenha = new JPasswordField(20);
+        txtLogin = new JTextField(15);
+        txtSenha = new JPasswordField(15);
+        txtSenha.setEchoChar('*');
 
         btnLogin = new JButton("Entrar");
         btnRegistrar = new JButton("Registrar");
+        btnGerenciarCadastros = new JButton("Gerenciar Cadastros");
 
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -60,12 +67,57 @@ public class TelaLogin extends JFrame {
             }
         });
 
-        panel.add(lblLogin);
-        panel.add(txtLogin);
-        panel.add(lblSenha);
-        panel.add(txtSenha);
-        panel.add(btnLogin);
-        panel.add(btnRegistrar);
+        btnGerenciarCadastros.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                TelaGerenciarCadastros telaGerenciarCadastros = new TelaGerenciarCadastros();
+                telaGerenciarCadastros.setVisible(true);
+            }
+        });
+
+        // Deixar bonito
+        lblLogin.setFont(new Font("Arial", Font.BOLD, 16));
+        lblSenha.setFont(new Font("Arial", Font.BOLD, 16));
+
+        btnLogin.setPreferredSize(new Dimension(120, 30));
+        btnLogin.setFont(new Font("Arial", Font.BOLD, 14));
+        btnLogin.setBackground(Color.LIGHT_GRAY);
+
+        btnRegistrar.setPreferredSize(new Dimension(120, 30));
+        btnRegistrar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnRegistrar.setBackground(Color.LIGHT_GRAY);
+
+        btnGerenciarCadastros.setPreferredSize(new Dimension(150, 30));
+        btnGerenciarCadastros.setFont(new Font("Arial", Font.BOLD, 14));
+        btnGerenciarCadastros.setBackground(Color.LIGHT_GRAY);
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        panel.add(lblLogin, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        panel.add(txtLogin, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        panel.add(lblSenha, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        panel.add(txtSenha, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        panel.add(btnLogin, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        panel.add(btnRegistrar, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;
+        panel.add(btnGerenciarCadastros, constraints);
 
         getContentPane().add(panel, BorderLayout.CENTER);
 
@@ -73,11 +125,11 @@ public class TelaLogin extends JFrame {
     }
 
     private boolean autenticarUsuario(String login, String senha) {
-    String loginCorreto = "admin";
-    String senhaCorreta = "admin";
+        String loginCorreto = "admin";
+        String senhaCorreta = "admin";
 
-    return login.equals(loginCorreto) && senha.equals(senhaCorreta);
-}
+        return login.equals(loginCorreto) && senha.equals(senhaCorreta);
+    }
 
     private void abrirTelaCadastro() {
         TelaCadastro telaCadastro = new TelaCadastro();
