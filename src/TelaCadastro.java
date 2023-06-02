@@ -58,11 +58,15 @@ public class TelaCadastro extends JFrame {
                 String senha = new String(txtSenha.getPassword());
 
                 boolean registrou = Autenticacao.cadastro(email, senha);
-                if(!registrou){
-                    JOptionPane.showMessageDialog(rootPane, "Já existe uma conta com esse email!", "Email sendo utilizado!", HEIGHT);
-                }
-            }
-        });
+                if (registrou) {
+            JOptionPane.showMessageDialog(rootPane, "Registrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+            abrirTelaLogin();        
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Já existe uma conta com esse email!", "Email sendo utilizado!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+});
         container.add(btnRegistrar);
 
         btnVoltar = new JButton("Voltar");

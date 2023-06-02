@@ -1,6 +1,7 @@
+import ProjetoPoo.TelaBoasVindas;
 import ProjetoPoo.Autenticacao;
 import ProjetoPoo.TelaInicial;
-import ProjetoPoo.TelaGerenciarCadastros;
+import ProjetoPoo.GerenciarVeiculos;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,14 +49,10 @@ public class TelaLogin extends JFrame {
 
                 // Verificar a autenticação do usuário
                 if (autenticarUsuario(login, senha)) {
-                    TelaInicial telaInicial = null;
-                    try {
-                        telaInicial = new TelaInicial();
-                    } catch (ParseException ex) {
-                        Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    telaInicial.setVisible(true);
-                    dispose(); // Fechar a tela de login
+                    TelaBoasVindas telaBoasVindas = null;
+                    telaBoasVindas = new TelaBoasVindas();
+                    telaBoasVindas.setVisible(true);
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Credenciais inválidas. Por favor, tente novamente.", "Erro de autenticação", JOptionPane.ERROR_MESSAGE);
                 }
@@ -65,6 +62,7 @@ public class TelaLogin extends JFrame {
         btnRegistrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 abrirTelaCadastro();
+                dispose();
             }
         });
 
@@ -126,7 +124,7 @@ public class TelaLogin extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new TelaLogin();
+                new TelaBoasVindas();
             }
         });
     }

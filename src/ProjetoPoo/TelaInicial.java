@@ -26,8 +26,7 @@ public class TelaInicial extends JFrame{
     public JFormattedTextField ftxtano;    
     public JComboBox cmbTipo;
     public JComboBox cmbProprietario;
-    public JButton btnEnviar, btnVoltar;
-    private JButton btnGerenciarCadastros;
+    public JButton btnEnviar, btnAvancar, btnVoltar;
    
     
     
@@ -59,11 +58,11 @@ public class TelaInicial extends JFrame{
             Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
         }
         btnEnviar = new JButton("Enviar");
-        btnVoltar = new JButton("avançar");
-        btnGerenciarCadastros = new JButton("gerenciar");
+        btnAvancar = new JButton("avançar");
+        btnVoltar = new JButton ("voltar");
         
         
-        btnVoltar.addActionListener(new ActionListener() {
+        btnAvancar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -75,26 +74,28 @@ public class TelaInicial extends JFrame{
             }
         });
         
-        btnGerenciarCadastros.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                TelaGerenciarCadastros telaGerenciarCadastros = new TelaGerenciarCadastros();
-                telaGerenciarCadastros.setVisible(true);
-            }
-        });
-
-        
-        
         btnEnviar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try{
                     cliqueBtnEnviar();
                 } catch (ParseException ex) {
                     Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+                     {
+                   }
                 }
             }
         });
         
-        btnGerenciarCadastros.setBounds(250, 320, 100, 70);
+        btnVoltar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TelaBoasVindas telaBoasVindas = new TelaBoasVindas();
+        telaBoasVindas.setVisible(true);
+        dispose();
+            }
+        });
+        
+        
         lblNome.setBounds(10, 10, 200, 25);
         lblplaca.setBounds(10, 220, 200, 25);
         txtplaca.setBounds(80, 220, 200, 25);
@@ -105,10 +106,11 @@ public class TelaInicial extends JFrame{
         lblTipo.setBounds(10, 110, 200, 25);
         cmbTipo.setBounds(120, 110, 200, 25);
         cmbProprietario.setBounds(170, 260, 200, 25);
-        btnEnviar.setBounds(340, 320, 100, 70);
-        btnVoltar.setBounds(150, 320, 100, 70);
+        btnEnviar.setBounds(310, 320, 100, 70);
+        btnAvancar.setBounds(160, 320, 100, 70);
        ftxtano.setBounds(129, 170, 200, 25);
        lblano.setBounds(10,170,200,25);
+       btnVoltar.setBounds(235, 400, 100, 40);
 
         getContentPane().add(lblNome);
         getContentPane().add(lblplaca);
@@ -122,9 +124,9 @@ public class TelaInicial extends JFrame{
         getContentPane().add(cmbTipo);
         getContentPane().add(cmbProprietario);
         getContentPane().add(btnEnviar);
-        getContentPane().add(btnVoltar);
+        getContentPane().add(btnAvancar);
         getContentPane().add(lblano);
-       getContentPane().add(btnGerenciarCadastros);
+       getContentPane().add(btnVoltar);
       
         
         

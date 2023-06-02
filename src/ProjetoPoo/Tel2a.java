@@ -53,16 +53,9 @@ public class Tel2a extends JFrame{
                 new MaskFormatter("##/##/####"));
         lblTipo = new JLabel("Tipos de pessoas:");
         btnEnviar = new JButton("Enviar");
-        btnVoltar = new JButton("sair");
+        btnVoltar = new JButton("Voltar");
         
-        btnVoltar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                
-                }
-            
-        });
+        
                 btnEnviar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	try{
@@ -73,6 +66,14 @@ public class Tel2a extends JFrame{
             }
         });
         
+        btnVoltar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TelaBoasVindas telaBoasVindas = new TelaBoasVindas();
+                telaBoasVindas.setVisible(true);
+                dispose();
+            }
+        });
         
         
        
