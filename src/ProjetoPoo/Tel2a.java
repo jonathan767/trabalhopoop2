@@ -112,29 +112,28 @@ public class Tel2a extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
-    private void cliqueBtnEnviar() throws ParseException{
-        String nome = txtNome.getText(),
-               nascimento = ftxtidade.getText(),
-             email  = txtemail.getText(),
-                cep = ftxcep.getText(),
-             telefone = ftxtelefone.getText();
+   private void cliqueBtnEnviar() throws ParseException {
+    String nome = txtNome.getText();
+    String nascimento = ftxtidade.getText();
+    String email = txtemail.getText();
+    String cep = ftxcep.getText();
+    String telefone = ftxtelefone.getText();
+
+    try {
+        BDConnection.inserirInformacoesProprietario(nome, telefone, nascimento, email, cep);
+    } catch (ClassNotFoundException | SQLException ex) {
+        ex.printStackTrace();
+    }
+
              
                
         
         System.out.println("nome : " + nome);
-        //System.out.println("data de nascimento: " + idade);
         System.out.println("email: " + email);
         System.out.println("cep: " + cep );
         System.out.println("telefone: " + telefone  );
                 
-        try {
-            BDConnection.insereProprietario(nome, telefone, nascimento, email, cep);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Tel2a.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Tel2a.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+       
         this.dispose();
         new TelaInicial();
      

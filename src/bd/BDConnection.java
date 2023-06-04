@@ -74,6 +74,25 @@ public class BDConnection {
 
         return false;
     }
+    
+    public static void inserirInformacoesProprietario(String nome, String telefone, String nascimento, String email, String cep) throws ClassNotFoundException, SQLException {
+    Class.forName("com.mysql.jdbc.Driver");
+    String urlJDBC = "jdbc:mysql://" + hostname + ":3306/" + database;
+    Connection conexao = DriverManager.getConnection(urlJDBC, username, password);
+
+    String query = "INSERT INTO informacoes_proprietario (nome, telefone, nascimento, email, cep) VALUES (?, ?, ?, ?, ?)";
+    try (PreparedStatement preparedStatement = conexao.prepareStatement(query)) {
+        preparedStatement.setString(1, nome);
+        preparedStatement.setString(2, telefone);
+        preparedStatement.setString(3, nascimento);
+        preparedStatement.setString(4, email);
+        preparedStatement.setString(5, cep);
+
+        preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
 
     public static String[] getProprietarios() throws ClassNotFoundException {
         List<String> proprietarios = new ArrayList<>();
