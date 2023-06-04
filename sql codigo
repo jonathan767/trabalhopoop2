@@ -1,0 +1,30 @@
+CREATE TABLE IF NOT EXISTS `veiculos` (
+  `id_veiculo` INT NOT NULL AUTO_INCREMENT,
+  `modelo` VARCHAR(45) NOT NULL,
+  `nome` VARCHAR(45) NOT NULL,
+  `placa` VARCHAR(7) NOT NULL,
+  `ano` INT NOT NULL,
+  `tipo` VARCHAR(7) NOT NULL,
+  `id_proprietario` INT NOT NULL,
+  PRIMARY KEY (`id_veiculo`, `id_proprietario`),
+  CONSTRAINT `fk_veiculos_informacoes_proprietario`
+    FOREIGN KEY (`id_proprietario`)
+    REFERENCES `informacoes_proprietario` (`idinformacoes_proprietario`));
+
+CREATE TABLE IF NOT EXISTS `informacoes_proprietario` (
+  `idinformacoes_proprietario` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(70) NOT NULL,
+  `telefone` VARCHAR(15) NOT NULL,
+  `nascimento` VARCHAR(10) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `cep` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idinformacoes_proprietario`));
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(155) UNIQUE NOT NULL,
+  `password` VARCHAR(32) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+  
+  SELECT * FROM users;
