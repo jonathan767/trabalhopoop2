@@ -38,37 +38,26 @@ public class Autentic2 {
 
     return new Object[0][];
 }
-}
+  public static boolean Deletar(String id) {
+        String query = "DELETE FROM veiculos WHERE id_veiculo = ?";
 
+        try (Connection connection = BDConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
+            preparedStatement.setString(1, id);
 
+            int rowsDeleted = preparedStatement.executeUpdate();
+            return rowsDeleted > 0;
 
-/* public static Object[][] List2() {
-    String query = "SELECT idinformacoesproprietario, nome, telefone, nascimento,email,cep SElECT FROM informacoes_proprietario";
-
-    try (Connection connection = BDConnection.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(query);
-         ResultSet resultSet = preparedStatement.executeQuery()) {
-
-        List<Object[]> veiculosList = new ArrayList<>();
-        while (resultSet.next()) {
-            Object[] row = new Object[6];
-            row[0] = resultSet.getObject("idinformacoesproprietario");
-            row[1] = resultSet.getObject("nome");
-            row[2] = resultSet.getObject("telefone");
-            row[3] = resultSet.getObject("nascimento");
-            row[4] = resultSet.getObject("email");
-            row[5] = resultSet.getObject("cep");
-            veiculosList.add(row);
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
         }
 
-        return veiculosList.toArray(new Object[0][]);
-
-    } catch (ClassNotFoundException | SQLException ex) {
-        ex.printStackTrace();
+        return false;
     }
-
-    return new Object[0][];
 }
-} 
-\**/
+
+
+
+
+

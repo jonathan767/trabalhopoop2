@@ -48,13 +48,16 @@ public class GerenciarVeiculos extends JFrame {
     }
 
     private void configureListeners() {
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateTableData();
-            }
-        });
-        timer.start();
+    timer = new Timer(1000, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            updateTableData();
+            timer.setDelay(9000); // Define o delay para 9000 milissegundos após a primeira execução
+            timer.setInitialDelay(9000); // Define o initial delay para 9000 milissegundos após a primeira execução
+            timer.restart(); // Reinicia o Timer com o novo delay
+        }
+    });
+timer.start();
 
         btnVoltar.addActionListener(new ActionListener() {
             @Override
@@ -104,9 +107,13 @@ public class GerenciarVeiculos extends JFrame {
                     int option = JOptionPane.showConfirmDialog(null, "Deseja deletar o registro com ID " + id + "?");
                     if (option == JOptionPane.YES_OPTION) {
                         // Deletar o registro
-                        // Autentic2.Deletar(id);
-                        // Exibir uma mensagem de sucesso ou erro
-                        JOptionPane.showMessageDialog(null, "Registro deletado com sucesso!");
+                        boolean deleted = Autentic2.Deletar(id);
+                        if (deleted) {
+                            JOptionPane.showMessageDialog(null, "Registro deletado com sucesso!");
+                            updateTableData(); // Atualizar a tabela após a exclusão
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Falha ao deletar o registro.");
+                        }
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Nenhum registro selecionado");
@@ -123,8 +130,10 @@ public class GerenciarVeiculos extends JFrame {
         tableModel.setRowCount(0);
 
         // Adicionar os novos dados à tabela
-        for (Object[] row : data) {
-            tableModel.addRow(row);
+        if (data != null) {
+            for (Object[] row : data) {
+                tableModel.addRow(row);
+            }
         }
     }
 }

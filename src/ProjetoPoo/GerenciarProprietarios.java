@@ -48,13 +48,16 @@ public class GerenciarProprietarios extends JFrame {
     }
 
     private void configureListeners() {
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateTableData();
-            }
-        });
-        timer.start();
+    timer = new Timer(1000, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            updateTableData();
+            timer.setDelay(9000); // Define o delay para 9000 milissegundos após a primeira execução
+            timer.setInitialDelay(9000); // Define o initial delay para 9000 milissegundos após a primeira execução
+            timer.restart(); // Reinicia o Timer com o novo delay
+        }
+    });
+timer.start();
 
         btnVoltar.addActionListener(new ActionListener() {
             @Override
@@ -93,7 +96,7 @@ public class GerenciarProprietarios extends JFrame {
             }
         });
 
-        btnDeletar.addActionListener(new ActionListener() {
+       btnDeletar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
@@ -101,11 +104,17 @@ public class GerenciarProprietarios extends JFrame {
                     // Obter o ID do registro selecionado
                     String id = table.getValueAt(selectedRow, 0).toString();
 
-                 
+                    // Exibir um JOptionPane de confirmação para deletar o registro
                     int option = JOptionPane.showConfirmDialog(null, "Deseja deletar o registro com ID " + id + "?");
                     if (option == JOptionPane.YES_OPTION) {
-                        
-                        JOptionPane.showMessageDialog(null, "Registro deletado com sucesso!");
+                        // Deletar o registro
+                        boolean deleted = Autentic3.Deletar(id);
+                        if (deleted) {
+                            JOptionPane.showMessageDialog(null, "Registro deletado com sucesso!");
+                            updateTableData(); // Atualizar a tabela após a exclusão
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Falha ao deletar o registro.");
+                        }
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Nenhum registro selecionado");

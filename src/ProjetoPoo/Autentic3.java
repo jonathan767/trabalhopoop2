@@ -40,4 +40,24 @@ public class Autentic3 {
 
     return new Object[0][];
 }
+     public static boolean Deletar(String id) {
+        String query = "DELETE FROM informacoes_proprietario WHERE idinformacoes_proprietario = ?";
+
+        try (Connection connection = BDConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, id);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+            return rowsDeleted > 0;
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
 }
+    
+    
+    
