@@ -1,6 +1,6 @@
 package ProjetoPoo ;
-import ProjetoPoo.TelaInicial;
-import bd.BDConnection;
+import ProjetoPoo.CadastroVeiculo;
+import bd.BDProprietario;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -19,16 +19,16 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
-public class Tel2a extends JFrame{
+public class CadastrarProprietario extends JFrame{
    
     public JLabel lblNome, lblidade, lblTipo, lbltelefone, lblemail, lblcep;
     public JTextField txtNome, txtemail;
     public JFormattedTextField ftxtidade, ftxtelefone, ftxcep;    
-    public JButton btnEnviar,btnVoltar, btnTrocar;
+    public JButton btnEnviar,btnVoltar, btnTrocar,btnAvancar;
     
     
     
-    public Tel2a() throws ParseException{
+    public CadastrarProprietario() throws ParseException{
         
       
         setLayout(null);
@@ -54,6 +54,8 @@ public class Tel2a extends JFrame{
         lblTipo = new JLabel("Tipos de pessoas:");
         btnEnviar = new JButton("Enviar");
         btnVoltar = new JButton("Voltar");
+        btnAvancar = new JButton("Avançar");
+
         
         
                 btnEnviar.addActionListener(new ActionListener() {
@@ -61,8 +63,26 @@ public class Tel2a extends JFrame{
             	try{
                     cliqueBtnEnviar();
                 } catch (ParseException ex) {
-                    Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CadastroVeiculo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CadastrarProprietario.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+        });
+                
+                 btnAvancar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CadastroVeiculo cadastroVeiculo = null;
+                try {
+                    cadastroVeiculo = new CadastroVeiculo();
+                } catch (ParseException ex) {
+                    Logger.getLogger(CadastrarProprietario.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CadastrarProprietario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                cadastroVeiculo.setVisible(true);
+                dispose();
             }
         });
         
@@ -90,6 +110,8 @@ public class Tel2a extends JFrame{
         ftxcep.setBounds(129,210,200,25);
         btnEnviar.setBounds(100, 300, 100, 70);
         btnVoltar.setBounds(250, 300, 100, 70);
+        
+        btnAvancar.setBounds(235, 400, 100, 40);
 
         getContentPane().add(lblNome);
         getContentPane().add(txtNome);
@@ -104,7 +126,10 @@ public class Tel2a extends JFrame{
         getContentPane().add(lblTipo);
         getContentPane().add(btnEnviar);
         getContentPane().add(btnVoltar);
-        
+          getContentPane().add(btnAvancar);
+          
+          
+          
         //Especificações da Tela
         setSize(500, 500);
         setTitle("informacoes proprietario");
@@ -112,19 +137,19 @@ public class Tel2a extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
-   private void cliqueBtnEnviar() throws ParseException {
+   private void cliqueBtnEnviar() throws ParseException, SQLException {
     String nome = txtNome.getText();
     String nascimento = ftxtidade.getText();
     String email = txtemail.getText();
     String cep = ftxcep.getText();
     String telefone = ftxtelefone.getText();
 
-    try {
-        BDConnection.inserirInformacoesProprietario(nome, telefone, nascimento, email, cep);
-    } catch (ClassNotFoundException | SQLException ex) {
+       try {
+        BDProprietario bdProprietario = new BDProprietario();
+        bdProprietario.inserirInformacoesProprietario(nome, telefone, nascimento, email, cep);
+    } catch (SQLException ex) {
         ex.printStackTrace();
     }
-
              
                
         
@@ -135,7 +160,7 @@ public class Tel2a extends JFrame{
                 
        
         this.dispose();
-        new TelaInicial();
+        new CadastroVeiculo();
      
     }
 }

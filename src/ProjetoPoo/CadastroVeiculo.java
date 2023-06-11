@@ -1,65 +1,60 @@
 package ProjetoPoo;
-import bd.BDConnection;
-import java.awt.BorderLayout;
-import java.awt.Window;
+
+import ProjetoPoo.CadastrarProprietario;
+import ProjetoPoo.TelaBoasVindas;
+import bd.BDProprietario;
+import bd.BDVeiculo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
-public class TelaInicial extends JFrame {
+public class CadastroVeiculo extends JFrame {
 
     public JLabel lblplaca, lblNome, lblmodelo, lblTipo, lblano;
     public JTextField txtNome, txtplaca, txtmodelo;
     public JFormattedTextField ftxtano;
     public JComboBox<String> cmbTipo;
     public JComboBox<String> cmbProprietario;
-    public JButton btnEnviar, btnAvancar, btnVoltar;
+    public JButton btnEnviar, btnVolt2, btnVoltar;
 
     private final String[] tiposVeiculos = { "Carro", "Moto" };
     private String modelo;
 
-    public TelaInicial() throws ParseException {
+    public CadastroVeiculo() throws ParseException, SQLException {
         setLayout(null);
 
         lblNome = new JLabel("Nome:");
         txtNome = new JTextField();
-        lblplaca = new JLabel("placa:");
+        lblplaca = new JLabel("Placa:");
         txtplaca = new JTextField();
-        lblano = new JLabel("ano do veiculo:");
+        lblano = new JLabel("Ano do veiculo:");
         ftxtano = new JFormattedTextField(new MaskFormatter("####"));
 
-        lblmodelo = new JLabel("modelo:");
+        lblmodelo = new JLabel("Modelo:");
         txtmodelo = new JTextField();
         lblTipo = new JLabel("Tipo do veiculo:");
         cmbTipo = new JComboBox<>(tiposVeiculos);
-        try {
-            cmbProprietario = new JComboBox<>(BDConnection.getProprietarios());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        cmbProprietario = new JComboBox<>(new BDProprietario().getProprietarios());
         btnEnviar = new JButton("Enviar");
-        btnAvancar = new JButton("avançar");
-        btnVoltar = new JButton("voltar");
+        btnVolt2 = new JButton("Voltar");
+        btnVoltar = new JButton("Tela Inicial");
 
-        btnAvancar.addActionListener(new ActionListener() {
+        btnVolt2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 try {
-                    new Tel2a();
+                    new CadastrarProprietario();
                 } catch (ParseException ex) {
-                    Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CadastroVeiculo.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -69,7 +64,8 @@ public class TelaInicial extends JFrame {
                 try {
                     cliqueBtnEnviar();
                 } catch (ParseException ex) {
-                    Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CadastroVeiculo.class.getName()).log(Level.SEVERE, null, ex);
+                    
                 }
             }
         });
@@ -94,7 +90,7 @@ public class TelaInicial extends JFrame {
         cmbTipo.setBounds(120, 110, 200, 25);
         cmbProprietario.setBounds(170, 260, 200, 25);
         btnEnviar.setBounds(310, 320, 100, 70);
-        btnAvancar.setBounds(160, 320, 100, 70);
+        btnVolt2.setBounds(160, 320, 100, 70);
         ftxtano.setBounds(129, 170, 200, 25);
         lblano.setBounds(10, 170, 200, 25);
         btnVoltar.setBounds(235, 400, 100, 40);
@@ -111,12 +107,12 @@ public class TelaInicial extends JFrame {
         getContentPane().add(cmbTipo);
         getContentPane().add(cmbProprietario);
         getContentPane().add(btnEnviar);
-        getContentPane().add(btnAvancar);
+        getContentPane().add(btnVolt2);
         getContentPane().add(lblano);
         getContentPane().add(btnVoltar);
 
         setSize(600, 600);
-        setTitle("veiculos");
+        setTitle("Veículos");
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -132,29 +128,31 @@ public class TelaInicial extends JFrame {
 
         int id_proprietario = Integer.parseInt(proprietario.split("[.]")[0]);
 
-        System.out.println("nome : " + nome);
-        System.out.println("ano  : " + ano);
-        System.out.println("tipo : " + tipo);
-        System.out.println("placa : " + placa);
-        System.out.println("modelo : " + modelo);
+        System.out.println("Nome: " + nome);
+        System.out.println("Ano: " + ano);
+        System.out.println("Tipo: " + tipo);
+        System.out.println("Placa: " + placa);
+        System.out.println("Modelo: " + modelo);
 
         try (PrintWriter pw = new PrintWriter(new File("usuarios"))) {
-            pw.println("nome : " + nome);
-            pw.println("ano : " + ano);
-            pw.println("placa" + placa);
-            pw.println("tipo : " + tipo);
+            pw.println("Nome: " + nome);
+            pw.println("Ano: " + ano);
+            pw.println("Placa: " + placa);
+            pw.println("Tipo: " + tipo);
 
         } catch (FileNotFoundException e) {
             System.out.println("Arquivo não existe");
         }
 
         try {
-            BDConnection.insereVeiculo(modelo, nome, placa, Integer.parseInt(ano), tipo, id_proprietario);
+            BDVeiculo bdVeiculo = new BDVeiculo();
+            bdVeiculo.insereVeiculo(modelo, nome, placa, Integer.parseInt(ano), tipo, id_proprietario);
         } catch (Exception e) {
             System.out.println(e);
         }
-
-        dispose();
-        new Tel2a();
+        
+        
+       this.dispose();
+        new TelaBoasVindas();
     }
 }

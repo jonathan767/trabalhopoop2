@@ -1,9 +1,14 @@
 package ProjetoPoo;
 
+import bd.BDProprietario;
+import bd.BDVeiculo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 public class GerenciarVeiculos extends JFrame {
@@ -68,72 +73,99 @@ timer.start();
             }
         });
 
-        btnModificar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = table.getSelectedRow();
-                if (selectedRow != -1) {
-                    // Obter os dados da linha selecionada
-                    String id = table.getValueAt(selectedRow, 0).toString();
-                    String nome = table.getValueAt(selectedRow, 1).toString();
-                    String modelo = table.getValueAt(selectedRow, 2).toString();
-                    String placa = table.getValueAt(selectedRow, 3).toString();
-                    String ano = table.getValueAt(selectedRow, 4).toString();
+     btnModificar.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            // Obter os dados da linha selecionada
+            String id = table.getValueAt(selectedRow, 0).toString();
+            String nome = table.getValueAt(selectedRow, 1).toString();
+            String modelo = table.getValueAt(selectedRow, 2).toString();
+            String placa = table.getValueAt(selectedRow, 3).toString();
+            String ano = table.getValueAt(selectedRow, 4).toString();
 
-                    // Exibir um JOptionPane com os dados selecionados para modificar
-                    StringBuilder message = new StringBuilder();
-                    message.append("ID: ").append(id).append("\n");
-                    message.append("Nome: ").append(nome).append("\n");
-                    message.append("Modelo: ").append(modelo).append("\n");
-                    message.append("Placa: ").append(placa).append("\n");
-                    message.append("Ano: ").append(ano).append("\n");
+            // Criar um formulário de edição para atualizar os dados
+            JTextField txtNome = new JTextField(nome);
+            JTextField txtModelo = new JTextField(modelo);
+            JTextField txtPlaca = new JTextField(placa);
+            JTextField txtAno = new JTextField(ano);
 
-                    JOptionPane.showMessageDialog(null, message.toString());
+            Object[] fields = {
+                "Nome:", txtNome,
+                "Modelo:", txtModelo,
+                "Placa:", txtPlaca,
+                "Ano:", txtAno
+            };
+
+            int option = JOptionPane.showConfirmDialog(null, fields, "Modificar Veículo", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                // Obter os novos valores do formulário
+                String Nome = txtNome.getText();
+                String Modelo = txtModelo.getText();
+                String Placa = txtPlaca.getText();
+                String Ano = txtAno.getText();
+
+                // Atualizar os dados no banco de dados
+                boolean updated = BDVeiculo.Modificar(id, Nome, Modelo, Placa, Ano);
+                if (updated) {
+                    JOptionPane.showMessageDialog(null, "Registro atualizado com sucesso!");
+                    updateTableData(); // Atualizar a tabela após a modificação
                 } else {
-                    JOptionPane.showMessageDialog(null, "Nenhum registro selecionado");
+                    JOptionPane.showMessageDialog(null, "Falha ao atualizar o registro.");
                 }
             }
-        });
+        } else {
+            JOptionPane.showMessageDialog(null, "Nenhum registro selecionado");
+        }
+    }
+});
 
-        btnDeletar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = table.getSelectedRow();
-                if (selectedRow != -1) {
-                    // Obter o ID do registro selecionado
-                    String id = table.getValueAt(selectedRow, 0).toString();
 
-                    // Exibir um JOptionPane de confirmação para deletar o registro
-                    int option = JOptionPane.showConfirmDialog(null, "Deseja deletar o registro com ID " + id + "?");
-                    if (option == JOptionPane.YES_OPTION) {
-                        // Deletar o registro
-                        boolean deleted = Autentic2.Deletar(id);
-                        if (deleted) {
-                            JOptionPane.showMessageDialog(null, "Registro deletado com sucesso!");
-                            updateTableData(); // Atualizar a tabela após a exclusão
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Falha ao deletar o registro.");
-                        }
-                    }
+btnDeletar.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            // Obter o ID do registro selecionado
+            String id = table.getValueAt(selectedRow, 0).toString();
+
+            // Exibir um JOptionPane de confirmação para deletar o registro
+            int option = JOptionPane.showConfirmDialog(null, "Deseja deletar o registro com ID " + id + "?");
+            if (option == JOptionPane.YES_OPTION) {
+                // Deletar o registro
+                boolean deleted = BDVeiculo.Deletar(id);
+                if (deleted) {
+                    JOptionPane.showMessageDialog(null, "Registro deletado com sucesso!");
+                    updateTableData(); // Atualizar a tabela após a exclusão
                 } else {
-                    JOptionPane.showMessageDialog(null, "Nenhum registro selecionado");
+                    JOptionPane.showMessageDialog(null, "Falha ao deletar o registro.");
                 }
             }
-        });
+        } else {
+            JOptionPane.showMessageDialog(null, "Nenhum registro selecionado");
+        }
+    }
+});
     }
 
-    private void updateTableData() {
+
+    
+
+   private void updateTableData() {
+    try {
         // Obter os dados do banco de dados
-        Object[][] data = Autentic2.Listar();
+        Object[][] data = BDVeiculo.Listar();
 
         // Limpar os dados antigos da tabela
         tableModel.setRowCount(0);
 
         // Adicionar os novos dados à tabela
-        if (data != null) {
-            for (Object[] row : data) {
-                tableModel.addRow(row);
-            }
+        for (Object[] row : data) {
+            tableModel.addRow(row);
         }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
     }
+   }
 }

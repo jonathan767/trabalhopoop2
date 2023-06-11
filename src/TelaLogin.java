@@ -1,12 +1,10 @@
 import ProjetoPoo.TelaBoasVindas;
-import ProjetoPoo.Autenticacao;
-import ProjetoPoo.TelaInicial;
-import ProjetoPoo.GerenciarVeiculos;
-
+import bd.BDAutenticacao;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +15,6 @@ public class TelaLogin extends JFrame {
     private JPasswordField txtSenha;
     private JButton btnLogin;
     private JButton btnRegistrar;
-    
 
     public TelaLogin() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,7 +28,7 @@ public class TelaLogin extends JFrame {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(10, 10, 10, 10);
 
-        JLabel lblLogin = new JLabel("Login:");
+        JLabel lblLogin = new JLabel("Email:");
         JLabel lblSenha = new JLabel("Senha:");
 
         txtLogin = new JTextField(15);
@@ -40,21 +37,23 @@ public class TelaLogin extends JFrame {
 
         btnLogin = new JButton("Entrar");
         btnRegistrar = new JButton("Registrar");
-        
 
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String login = txtLogin.getText();
                 String senha = new String(txtSenha.getPassword());
 
-                // Verificar a autenticação do usuário
-                if (autenticarUsuario(login, senha)) {
-                    TelaBoasVindas telaBoasVindas = null;
-                    telaBoasVindas = new TelaBoasVindas();
-                    telaBoasVindas.setVisible(true);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Credenciais inválidas. Por favor, tente novamente.", "Erro de autenticação", JOptionPane.ERROR_MESSAGE);
+                try {
+                    // Verificar a autenticação do usuário
+                    if (autenticarUsuario(login, senha)) {
+                        TelaBoasVindas telaBoasVindas = new TelaBoasVindas();
+                        telaBoasVindas.setVisible(true);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Credenciais inválidas. Por favor, tente novamente.", "Erro de autenticação", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -66,7 +65,6 @@ public class TelaLogin extends JFrame {
             }
         });
 
-        
         // Deixar bonito
         lblLogin.setFont(new Font("Arial", Font.BOLD, 16));
         lblSenha.setFont(new Font("Arial", Font.BOLD, 16));
@@ -105,27 +103,19 @@ public class TelaLogin extends JFrame {
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
-        
 
         getContentPane().add(panel, BorderLayout.CENTER);
 
         setVisible(true);
     }
 
-    private boolean autenticarUsuario(String login, String senha) {
-        return Autenticacao.login(login, senha);
-    }
+ private boolean autenticarUsuario(String login, String senha) throws SQLException {
+    return BDAutenticacao.login(login, senha);
+}
+
 
     private void abrirTelaCadastro() {
         TelaCadastro telaCadastro = new TelaCadastro();
         telaCadastro.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new TelaBoasVindas();
-            }
-        });
     }
 }

@@ -1,5 +1,4 @@
-import ProjetoPoo.Autenticacao;
-import bd.BDConnection;
+import bd.BDAutenticacao;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TelaCadastro extends JFrame {
-    private JTextField txtLogin;
     private JTextField txtEmail;
     private JPasswordField txtSenha;
     private JButton btnRegistrar, btnVoltar;
@@ -25,14 +23,6 @@ public class TelaCadastro extends JFrame {
 
         Container container = getContentPane();
         container.setLayout(null);
-
-        JLabel lblLogin = new JLabel("Login:");
-        lblLogin.setBounds(50, 50, 60, 25);
-        container.add(lblLogin);
-
-        txtLogin = new JTextField();
-        txtLogin.setBounds(120, 50, 200, 25);
-        container.add(txtLogin);
 
         JLabel lblEmail = new JLabel("E-mail:");
         lblEmail.setBounds(50, 100, 60, 25);
@@ -57,16 +47,20 @@ public class TelaCadastro extends JFrame {
                 String email = txtEmail.getText();
                 String senha = new String(txtSenha.getPassword());
 
-                boolean registrou = Autenticacao.cadastro(email, senha);
-                if (registrou) {
-            JOptionPane.showMessageDialog(rootPane, "Registrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
-            abrirTelaLogin();        
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Já existe uma conta com esse email!", "Email sendo utilizado!", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-});
+                if (validarEmail(email)) {
+                    boolean registrou = BDAutenticacao.cadastro(email, senha);
+                    if (registrou) {
+                        JOptionPane.showMessageDialog(rootPane, "Registrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                        abrirTelaLogin();
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "Já existe uma conta com esse email!", "Email sendo utilizado!", JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Email inválido!", "Erro de validação", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         container.add(btnRegistrar);
 
         btnVoltar = new JButton("Voltar");
@@ -81,18 +75,17 @@ public class TelaCadastro extends JFrame {
         setVisible(true);
     }
 
+    private boolean validarEmail(String email) {
+        if (email.contains("@") && email.endsWith(".com")) {
+            return true;
+        }
+        return false;
+    }
+
     private void abrirTelaLogin() {
         TelaLogin telaLogin = new TelaLogin();
         telaLogin.setVisible(true);
         dispose();
     }
-
- 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new TelaCadastro();
-            }
-        });
-    }
 }
+

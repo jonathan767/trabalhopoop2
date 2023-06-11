@@ -1,7 +1,7 @@
 package ProjetoPoo;
 
 import ProjetoPoo.GerenciarVeiculos;
-import ProjetoPoo.TelaInicial;
+import ProjetoPoo.CadastroVeiculo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +14,7 @@ public class TelaBoasVindas extends JFrame {
     private JButton btnCadastrarVeiculo;
     private JButton btnGerenciarProprietarios;
     private JButton btnGerenciaveicoloss;
-
+private JButton btnSair;
 
     public TelaBoasVindas() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,6 +54,18 @@ btnGerenciaveicoloss.addActionListener(new ActionListener() {
 container.add(btnGerenciaveicoloss);
 
         
+
+  btnSair = new JButton("Sair");
+        btnSair.setBounds(150, 200, 100, 30);
+        btnSair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                sairDoPrograma();
+            }
+        });
+        container.add(btnSair);
+
+        setVisible(true);
+
         
         
         btnGerenciarProprietarios = new JButton("Gerenciar Proprietarios ");
@@ -67,10 +79,11 @@ container.add(btnGerenciaveicoloss);
 
         setVisible(true);
     }
+    
 
     private void abrirTelaCadastroVeiculo() throws ParseException {
-        TelaInicial TelaInicial = new TelaInicial();
-        TelaInicial.setVisible(true);
+        CadastrarProprietario Tel2a = new CadastrarProprietario();
+        Tel2a.setVisible(true);
         dispose();
     }
 
@@ -82,18 +95,17 @@ container.add(btnGerenciaveicoloss);
     dispose();
 }
     
+     private void sairDoPrograma() {
+        dispose();
+        System.exit(0);
+    }
+    
 private void abrirTelaGerenciarCadastros() {
     GerenciarVeiculos telaGerenciarCadastros = new GerenciarVeiculos();
         telaGerenciarCadastros.setVisible(true);
         dispose();
     }
+  }
+        
+    
 
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new TelaBoasVindas();
-            }
-        });
-    }
-}
